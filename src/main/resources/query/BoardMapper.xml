@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="query">
+
+	<!--
+		resultMap
+			1. DTO의 속성명과 컬럼명이 같지 않을 때 매핑하기 위해 작성
+			2. join 설정을 위해 작성
+			
+			<resultMap	type="DTO의 타입"	id="식별자">
+				<id		property="속성명"		column="컬럼명">	-> primary key인 경우
+				<result	property="속성명"		column="컬럼명">	-> 일반 컬럼
+				
+				1:N에 대한 join 설정
+				<collection	property="속성명"		ofType="디테일에 타입"	resultMap="디테일의 resultMap id"/>
+				
+				1:1에 대한 join 설정
+				<association property=""	resultSet=""/>
+	  -->
+	  <resultMap type="Board" id="boardMap">
+	  	<id		property="board_no"		column="board_no"/>
+	  	<result property="board_title"		column="board_title"/>
+	  	<result	property="board_content"	column="board_content"/>
+	  	<result property="board_writer"		column="board_writer"/>
+	  	<result property="board_regdate"	column="board_resgate"/>
+	  </resultMap>
+	  
+	  
+	<select id="getBoard" parameterType="int" resultType="board">
+		SELECT 	*
+		FROM 	board
+		WHERE 	board_no = #{board_no}
+	</select>
+	
+	<select id="getTotalData" resultType="int">
+		SELECT	count(*)
+		FROM	board	
+	</select>
+	
+	<select id="getBoardList" parameterType="hashmap"   resultType="board">
+		SELECT		*
+		FROM 		board
+		ORDER BY 	board_regdate 	DESC
+		LIMIT		#{offset}, #{dataPerPage} 
+	</select>
+	
+	<insert id="insertBoard" parameterType="com.so.board.vo.Board">
+		insert into 
+			board(board_title, board_content, board_regdate, board_writer)
+		values 
+			(
+			#{board_title}, 
+			#{board_content},
+			sysdate(),
+			#{board_writer}
+			)
+	</insert>
+	
+	<update id="updateBoard" parameterType="board">
+		update	board
+		set		board_title = #{board_title},
+				board_content = #{board_content}
+		where	board_no = #{board_no}		
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+		delete
+		from	board
+		where	board_no = #{board_no}
+	</delete>
+</mapper>

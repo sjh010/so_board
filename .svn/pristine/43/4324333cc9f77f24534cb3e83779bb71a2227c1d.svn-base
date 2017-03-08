@@ -1,0 +1,10 @@
+package com.so.board.service;
+
+import java.util.List;
+
+import com.so.board.vo.Board;
+
+public interface BoardService {
+
+	public List<Board> getBoardList(int offset, int dataPerPage);
+}

@@ -1,0 +1,45 @@
+package com.so.board.util;
+
+public class PagingUtil {
+
+	private int totalData;		// 총 데이터 수
+	private int dataPerPage;	// 한 페이지당 데이터 수
+	private int pageCount;		// 화면당 페이지 개수(ex. < 1 2 3 >)
+	private int currentPage;	// 나타낼 페이지
+	
+	public PagingUtil(int totalData, int dataPerPage, int pageCount) {
+		super();
+		this.totalData = totalData;
+		this.dataPerPage = dataPerPage;
+		this.pageCount = pageCount;
+		this.currentPage = 1;
+	}
+
+	public PagingUtil(int totalData, int dataPerPage, int pageCount, int currentPage) {
+		super();
+		this.totalData = totalData;
+		this.dataPerPage = dataPerPage;
+		this.pageCount = pageCount;
+		this.currentPage = currentPage;
+	}
+	
+	public void paging(){
+		
+		int totalPage = (int) Math.ceil(this.totalData / this.dataPerPage);	// 총 페이지 수
+		int pageGroup = (int) Math.ceil(this.currentPage / this.pageCount);	// 페이지 그룹
+		int last = pageGroup * pageCount;	// 화면에 보여질 마지막 페이지 번호
+		
+		if(last > totalPage)	
+			last = totalPage;
+		int first = last - (this.pageCount - 1);	// 화면에 보여질 첫 페이지 번호
+		
+		int next = last+1;	// >
+		int prev = first-1; // <
+		
+		
+		
+	}
+	
+	
+	
+}

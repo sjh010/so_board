@@ -1,0 +1,17 @@
+package com.so.board.dao;
+
+import java.util.List;
+
+import com.so.board.vo.Board;
+
+public interface BoardDAO {
+	
+	public List<Board> searchAll(int offset, int dataPerPage);
+	
+	public void boardInsert(Board board);
+	
+	public void boardUpdate(Board board);
+	
+	public void boardDelete(int board_no);
+
+}
