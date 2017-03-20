@@ -13,7 +13,7 @@ public interface BoardService {
 	
 	public int getTotalData();
 	
-	public PagingUtil getPagingBoardList(int pageNo);
+	public PagingUtil getPagingBoardList(int pageNo, int dataPerPage, int pageCount);
 	
 	public void wirteBoard(Board board);
 }

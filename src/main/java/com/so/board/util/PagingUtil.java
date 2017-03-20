@@ -58,21 +58,30 @@ public class PagingUtil {
 	public String paging(){
 		
 		int totalPage = (int) Math.ceil((double) this.totalData / (double) this.dataPerPage);	// 총 페이지 수
-		int pageGroup = (int) Math.ceil((double) this.currentPage / (double) this.pageCount);	// 페이지 그룹
+		int totalPageGroup = (int) Math.ceil((double) totalPage / (double) this.pageCount);		// 총 페이지 그룹
+		int currentPageGroup = (int) Math.ceil((double) this.currentPage / (double) this.pageCount);	// 페이지 그룹
 		
-		int last = pageGroup * pageCount;	// 화면에 보여질 마지막 페이지 번호
+		int last = currentPageGroup * pageCount;	// 화면에 보여질 마지막 페이지 번호
 		
-		if(last > totalPage)	
+		if(last >= totalPage)	
 			last = totalPage;
 		
-		int first = 1;	// 화면에 보여질 첫 페이지 번호
+		int first = (pageCount*(currentPageGroup-1)) + 1;	// 화면에 보여질 첫 페이지 번호
 		
-		if((int)Math.ceil((double)totalPage/pageCount) > 1 && (int)Math.ceil((double)totalPage/pageCount) == pageGroup ){
-			first = last - (totalPage%pageCount)+1;
-		}
+//		if(totalPageGroup > 1 && totalPageGroup == currentPageGroup){
+//			if(pageCount==1)
+//				first = last;
+//			else
+//				first = (pageCount*(currentPageGroup-1)) + 1;
+//		}
 		
 		int next = last+1;	// >
 		int prev = first-1; // <
+		
+//		System.out.println("first = " + first);
+//		System.out.println("last = " + last);
+//		System.out.println("next = " + next);
+//		System.out.println("prev = " + prev);
 		
 		StringBuilder sb = new StringBuilder();
 		

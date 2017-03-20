@@ -19,42 +19,82 @@
 				1:1에 대한 join 설정
 				<association property=""	resultSet=""/>
 	  -->
-	  <resultMap type="Board" id="boardMap">
-	  	<id		property="board_no"		column="board_no"/>
-	  	<result property="board_title"		column="board_title"/>
-	  	<result	property="board_content"	column="board_content"/>
-	  	<result property="board_writer"		column="board_writer"/>
-	  	<result property="board_regdate"	column="board_resgate"/>
+	  <resultMap type="fileInfo"	id="fileInfo">
+		<id		property="file_no"				column="file_no"/>
+		<result	property="filename_original"	column="filename_original"/>
+		<result	property="filename_custom"		column="filename_custom"/>
+		<result	property="board_no"				column="board_no"/>
+	</resultMap>
+	  
+	  <resultMap type="board" id="board">
+	  	<id			property="board_no"			column="board_no"/>
+	  	<result		property="board_title"		column="board_title"/>
+	  	<result		property="board_content"	column="board_content"/>
+	  	<result 	property="board_writer"		column="board_writer"/>
+	  	<result 	property="board_regdate"	column="board_regdate"/>
+	  	<collection property="fileInfo"			column="board_no" 
+	  				javaType="java.util.ArrayList" ofType="fileInfo" select="getFileInfo"/>
 	  </resultMap>
 	  
+	<select id="getFileInfo" parameterType="int" resultType="fileInfo">
+		SELECT 	file_no, filename_original, filename_custom, board_no
+		FROM	fileinfo
+		WHERE	board_no = #{board_no}
+	</select>  
 	  
-	<select id="getBoard" parameterType="int" resultType="board">
-		SELECT 	*
-		FROM 	board
-		WHERE 	board_no = #{board_no}
+	<select id="getBoard" parameterType="int" resultMap="board">
+		SELECT 	board_no, board_writer, board_title, board_cotent, board_regdate
+		FROM	board
+		WHERE	board_no = #{board_no}
 	</select>
 	
+	
+	<select id="getFileInfo" parameterType="int" resultType="fileInfo">
+		SELECT	*
+		FROM	fileinfo
+		WHERE	board_no = #{board_no}
+	</select>
+
 	<select id="getTotalData" resultType="int">
 		SELECT	count(*)
 		FROM	board	
 	</select>
 	
-	<select id="getBoardList" parameterType="hashmap"   resultType="board">
+	<select id="getBoardList" parameterType="hashmap" resultType="board">
 		SELECT		*
 		FROM 		board
-		ORDER BY 	board_regdate 	DESC
+		ORDER BY 	board_no		DESC,
+					board_regdate 	DESC
 		LIMIT		#{offset}, #{dataPerPage} 
 	</select>
 	
 	<insert id="insertBoard" parameterType="com.so.board.vo.Board">
-		insert into 
+		
+		<![CDATA[
+		INSERT INTO 
 			board(board_title, board_content, board_regdate, board_writer)
-		values 
+		VALUES 
 			(
 			#{board_title}, 
 			#{board_content},
 			sysdate(),
 			#{board_writer}
+			)
+		]]>
+		
+		<selectKey keyProperty="board_no" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		
+	</insert>
+	
+	<insert id="insertFile" parameterType="com.so.board.vo.FileInfo">
+		INSERT INTO
+			fileinfo(filename_original, filename_custom, board_no)
+		VALUES(
+			#{filename_original},
+			#{filename_custom},
+			#{board_no}
 			)
 	</insert>
 	

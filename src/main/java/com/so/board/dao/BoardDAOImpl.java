@@ -3,12 +3,12 @@ package com.so.board.dao;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.so.board.vo.Board;
+import com.so.board.vo.FileInfo;
 
 @Repository
 public class BoardDAOImpl implements BoardDAO{
@@ -35,14 +35,21 @@ public class BoardDAOImpl implements BoardDAO{
 	@Override
 	public Board searchBoard(int board_no) {
 		
-		return session.selectOne("query.getBoard", board_no);
+		Board board = session.selectOne("query.getBoard", board_no);
+		
+		//List<FileInfo> fileInfo = session.selectList("query.getFileInfo", board_no);
+		
+		return board;
 	}
 	
-
-
 	@Override
-	public void boardInsert(Board board) {
+	public int boardInsert(Board board) {
+		
 		session.insert("query.insertBoard", board);
+		
+		int board_no = board.getBoard_no();
+				
+		return board_no;
 	}
 
 	@Override
@@ -56,12 +63,20 @@ public class BoardDAOImpl implements BoardDAO{
 	}
 
 	@Override
-	public void writeBoard(Board board) {	
+	public int writeBoard(Board board) {	
+		
 		session.insert("query.insertBoard", board);
+		
+		int board_no = board.getBoard_no();
+				
+		return board_no;
+	}
+
+	@Override
+	public void writeFileInfo(FileInfo fileInfo) {
+		session.insert("query.insertFile", fileInfo);
 	}
 
 
-	
 
-	
 }

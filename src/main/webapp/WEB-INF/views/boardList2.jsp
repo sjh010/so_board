@@ -54,7 +54,14 @@
 		$(".pagination").html("${paging}");
 		
 		$("#btnWrite").click(function(){
-			$(location).attr("href", "/board/write");
+			
+			if('<%=(String)session.getAttribute("member_name")%>' != "null"){
+				$(location).attr("href", "/write");
+			}
+			else{
+				alert("로그인 하세요");
+			}
+
 		});
 	});
 	

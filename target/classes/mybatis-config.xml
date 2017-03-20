@@ -8,7 +8,10 @@
 
 	<typeAliases>
 		<typeAlias alias="board" type="com.so.board.vo.Board"/>
+		<typeAlias alias="member" type="com.so.board.vo.Member"/>
+		<typeAlias alias="fileInfo" type="com.so.board.vo.FileInfo"/>
 	</typeAliases>
+	
 	
 
 </configuration>

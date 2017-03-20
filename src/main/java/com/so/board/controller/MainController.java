@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.so.board.service.BoardService;
 import com.so.board.util.PagingUtil;
@@ -22,7 +24,7 @@ public class MainController {
 	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 	
 	@Autowired
-	BoardService boardService;
+	private BoardService boardService;
 	
 	// 메인
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -36,47 +38,58 @@ public class MainController {
 
 	// 게시판 페이지
 	@RequestMapping(value = "/boardList2", method = RequestMethod.GET)
-	public String listBoard2(HttpServletRequest request, Model model, @RequestParam(defaultValue = "1") String pageNo){
+	public String listBoard2(Model model, @RequestParam(value="pageNo", defaultValue="1") String pageNo,
+										  @RequestParam(value="dataPerPage", defaultValue="5") String data_Per_Page,
+										  @RequestParam(value="pageCount", defaultValue="5") String page_Count){
 		
 		logger.info("---------------listBoard---------------");
 		
 		int page = Integer.parseInt(pageNo);
+		int dataPerPage = Integer.parseInt(data_Per_Page);
+		int pageCount = Integer.parseInt(page_Count);
 		
-		PagingUtil pageUtil = boardService.getPagingBoardList(page);
+		PagingUtil pageUtil = boardService.getPagingBoardList(page, dataPerPage, pageCount);
 		
 		model.addAttribute("paging", pageUtil.paging());
 		
 		if(page == 1){
-			model.addAttribute("boardList", boardService.getBoardList(page-1, pageUtil.getDataPerPage()));
+			model.addAttribute("boardList", boardService.getBoardList(page-1, dataPerPage));
 		}
 		else{
-			model.addAttribute("boardList", boardService.getBoardList((page-1)*pageUtil.getDataPerPage(), pageUtil.getDataPerPage()));
+			model.addAttribute("boardList", boardService.getBoardList((page-1)*dataPerPage, dataPerPage));
 		}
 		
 		model.addAttribute("menu", "board");
+		model.addAttribute("subMenu", "list");
 		
 		return "index";
-		
 	}
 	
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
-	public String writeBoardPage(){
+	public String writeBoardPage(Model model){
 		
-		return "boardWrite";
+		model.addAttribute("menu", "board");
+		model.addAttribute("subMenu", "write");
+		
+		return "index";
 	}
 	
 	@RequestMapping(value = "/writeBoard", method = RequestMethod.POST)
+	@ResponseBody
 	public String writeBoard(HttpServletRequest request, Board board){
+	
+		logger.info(board.toString());
 		
-		HttpSession session = request.getSession();
+		MultipartFile[] fileList = board.getBoard_files();
 		
-		String board_writer = (String) session.getAttribute("user_id");
-		
-		board.setBoard_writer(board_writer);
+		if(fileList != null){
+			for(MultipartFile file : fileList)
+				logger.info("FILE : " + file.getOriginalFilename());
+		}
 		
 		boardService.wirteBoard(board);
 		
-		return "redirect:/boardList2";
+		return "boardList2";
 	}
 	
 	@RequestMapping(value = "/boardView", method = RequestMethod.GET)
@@ -87,8 +100,10 @@ public class MainController {
 		Board board = boardService.getBoard(Integer.parseInt(board_no));
 		
 		model.addAttribute("board", board);
+		model.addAttribute("menu", "board");
+		model.addAttribute("subMenu", "view");
 		
-		return "boardView";
+		return "index";
 	}
 	
 

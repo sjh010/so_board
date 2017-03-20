@@ -32,6 +32,7 @@
 		<property name="mapperLocations">
 			<list>
 				<value>classpath:query/BoardMapper.xml</value>
+				<value>classpath:query/MemberMapper.xml</value>
 			</list>
 		</property>
 		<property name="dataSource" ref="dataSource"></property>

@@ -17,5 +17,7 @@ public class TestDaoImpl implements TestDao{
 	public String test() throws SQLException {
 		return query.selectOne("query.test");
 	}
+	
+	
 
 }

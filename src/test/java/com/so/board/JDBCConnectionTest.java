@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.so.board.dao.BoardDAO;
 import com.so.board.dao.TestDao;
 import com.so.board.vo.Board;
+import com.so.board.vo.FileInfo;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -60,7 +61,14 @@ public class JDBCConnectionTest {
 		board.setBoard_content("content");
 		board.setBoard_writer("writer");
 		
-		boardDAO.boardInsert(board);
+		int board_no = boardDAO.boardInsert(board);
+		
+		System.out.println(board_no);
+		
+//		FileInfo fileInfo = new FileInfo();
+//		
+//		fileInfo.setFilename_custom("test");
+//		fileInfo.setFilename_original("test");
 	}
 	
 	@Test
@@ -78,6 +86,15 @@ public class JDBCConnectionTest {
 	@Test
 	public void deleteBoard() throws Exception{
 		boardDAO.boardDelete(16);
+	}
+	
+	@Test
+	public void searchBoard() throws Exception{
+		int board_no = 1;
+		
+		Board board = boardDAO.searchBoard(board_no);
+		
+		System.out.println(board.toString());
 	}
 
 	

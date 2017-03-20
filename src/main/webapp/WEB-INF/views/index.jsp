@@ -16,7 +16,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <style>
+ 	body {
+		background: url(http://61.109.146.12:8080/GPMIS_V1.0/Images/ETC/login_bg_2010.jpg);
 
+	}	 
 </style>
 
 <script>
@@ -45,11 +48,6 @@
 </head>
 <body>
 
-	
-
-
-
-
 	<div id="header">
 		<jsp:include page="header.jsp"></jsp:include>
 	</div>
@@ -60,11 +58,20 @@
 				<jsp:include page="main.jsp"></jsp:include>
 			</c:when>
 			<c:when test="${menu eq 'board'}">
-				<jsp:include page="boardList2.jsp"></jsp:include>
+				<c:choose>
+					<c:when test="${subMenu eq 'list'}">
+						<jsp:include page="boardList2.jsp"></jsp:include>
+					</c:when>
+					<c:when test="${subMenu eq 'view'}">
+						<jsp:include page="boardView.jsp"></jsp:include>
+					</c:when>
+					<c:when test="${subMenu eq 'write'}">
+						<jsp:include page="boardWrite.jsp"></jsp:include>
+					</c:when>
+				</c:choose>
 			</c:when>
 		</c:choose> 
 	</div>
 	
-
 </body>
 </html>
